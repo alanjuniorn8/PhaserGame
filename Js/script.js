@@ -63,7 +63,7 @@
         player.setCollideWorldBounds(true);
         player.setBounce(0.3);
 
-        baddie = this.physics.add.sprite(20, 0, 'baddie');
+        baddie = this.physics.add.sprite(20, 200, 'baddie');
         baddie.setCollideWorldBounds(false);
         baddie.setBounce(0.3);
 
@@ -187,6 +187,8 @@
         this.physics.add.overlap(player, diamonds, hitDiamond, null, this);
         this.physics.add.collider(player,baddie,hitBaddie,null,this);
         this.physics.add.collider(player,baddietwo,hitBaddie,null,this);
+        this.physics.add.overlap(baddie,stars,collectStar,null,this);
+        this.physics.add.overlap(baddietwo,stars,collectStar,null,this);
 
     }
 
@@ -222,12 +224,12 @@
             gameOver = true;
         }
 
-        if ( life>=1 && baddie.x <= 400){
+        if ( life>=1 && baddie.x <= 400 && baddie.body.touching.down){
             baddie.setVelocityX(80);
             baddie.anims.play('rightBaddie', true);
         }
 
-        if ( life>=1 && baddietwo.x >= 400){
+        if ( life>=1 && baddietwo.x >= 400 && baddietwo.body.touching.down){
             baddietwo.setVelocityX(-80);
             baddietwo.anims.play('leftBaddie', true);
         }
