@@ -23,6 +23,7 @@
     let cursors;
     let stars;
     let baddie;
+    let baddietwo;
     let bombs;
     let diamonds;
     let score = 0;
@@ -41,6 +42,9 @@
             { frameWidth: 32, frameHeight: 48 }
         );
         this.load.spritesheet('baddie', 'assets/baddie.png',
+            { frameWidth: 32, frameHeight: 32 }
+        );
+        this.load.spritesheet('baddietwo', 'assets/baddie.png',
             { frameWidth: 32, frameHeight: 32 }
         );
     }
@@ -63,6 +67,9 @@
         baddie.setCollideWorldBounds(false);
         baddie.setBounce(0.3);
 
+        baddietwo = this.physics.add.sprite(780, 0, 'baddie');
+        baddietwo.setCollideWorldBounds(false);
+        baddietwo.setBounce(0.3);
         
         this.anims.create({
             key: 'left',
@@ -97,6 +104,7 @@
         
         this.physics.add.collider(player, ground);
         this.physics.add.collider(baddie, ground);
+        this.physics.add.collider(baddietwo, ground);
 
         cursors = this.input.keyboard.createCursorKeys();
 
@@ -178,6 +186,7 @@
         this.physics.add.collider(player, bombs, hitBomb, null, this);
         this.physics.add.overlap(player, diamonds, hitDiamond, null, this);
         this.physics.add.collider(player,baddie,hitBaddie,null,this);
+        this.physics.add.collider(player,baddietwo,hitBaddie,null,this);
 
     }
 
@@ -216,6 +225,11 @@
         if ( life>=1 && baddie.x <= 400){
             baddie.setVelocityX(80);
             baddie.anims.play('rightBaddie', true);
+        }
+
+        if ( life>=1 && baddietwo.x >= 400){
+            baddietwo.setVelocityX(-80);
+            baddietwo.anims.play('leftBaddie', true);
         }
 
 
