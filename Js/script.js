@@ -22,13 +22,14 @@
     let player;
     let cursors;
     let stars;
+    let baddie;
     let bombs;
     let diamonds;
     let score = 0;
     let scoreText;
     let life = 3;
     let lifeText;
-
+    let x;
 
     function preload() {
         this.load.image('sky', 'assets/sky.png');
@@ -38,6 +39,9 @@
         this.load.image('diamond', 'assets/diamond.png')
         this.load.spritesheet('dude', 'assets/dude.png',
             { frameWidth: 32, frameHeight: 48 }
+        );
+        this.load.spritesheet('baddie', 'assets/baddie.png',
+            { frameWidth: 32, frameHeight: 32 }
         );
     }
 
@@ -55,6 +59,11 @@
         player.setCollideWorldBounds(true);
         player.setBounce(0.3);
 
+        baddie = this.physics.add.sprite(20, 0, 'baddie');
+        baddie.setCollideWorldBounds(false);
+        baddie.setBounce(0.3);
+
+        
         this.anims.create({
             key: 'left',
             frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 3 }),
@@ -72,8 +81,22 @@
             frameRate: 10,
             repeat: -1
         });
+        this.anims.create({
+            key: 'leftBaddie',
+            frames: this.anims.generateFrameNumbers('baddie', { start: 0, end: 1 }),
+            frameRate: 10,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'rightBaddie',
+            frames: this.anims.generateFrameNumbers('baddie', { start: 2, end: 3 }),
+            frameRate: 10,
+            repeat: -1
+        });
 
+        
         this.physics.add.collider(player, ground);
+        this.physics.add.collider(baddie, ground);
 
         cursors = this.input.keyboard.createCursorKeys();
 
@@ -103,26 +126,26 @@
                     child.enableBody(true, child.x, 0, true, true);
         
                 });
-                let x = (player.x < 400) ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
                 
-
+                x = (player.x < 400) ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
+                
                 let bomb = bombs.create(x, 16, 'bomb');
                     bomb.setBounce(1);
                     bomb.setCollideWorldBounds(true);
                     bomb.setVelocity(Phaser.Math.Between(-200, 200),20);
                 
                 let diamond = diamonds.create(x, 16, 'diamond');
-                    diamond.setBounce(0.5);
-                    diamond.setCollideWorldBounds(true);
-                    diamond.setVelocity(Phaser.Math.Between(-200, 200));
-            }
+                    diamond.setBounce(0.9);
+                    diamond.setCollideWorldBounds(false);
+                    diamond.setVelocity(Phaser.Math.Between(-200, 200), 20);
+                }
             
         }
 
         this.physics.add.overlap(player, stars, collectStar, null, this);
 
-        scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
-        lifeText = this.add.text(684, 18, 'life: 3', { fontSize: '24px', fill: '#000' });
+        scoreText = this.add.text(16, 16, 'Score: 0', { fontSize: '32px', fill: '#000' });
+        lifeText = this.add.text(684, 18, 'Life: 3', { fontSize: '24px', fill: '#000' });
 
         bombs = this.physics.add.group();
         this.physics.add.collider(bombs, ground);
@@ -131,10 +154,10 @@
         this.physics.add.collider(diamonds, ground);
 
         function hitBomb(player, bomb) {
-            this.physics.pause();
-            player.setTint(0xff0000);
-            player.anims.play('turn');
-            gameOver = true;
+            bomb.disableBody(true, true);
+
+            life -= 1;
+            lifeText.setText('Life: ' + life);
 
         }
 
@@ -145,9 +168,16 @@
             scoreText.setText('Score: ' + score);
         }
 
+        function hitBaddie(player, baddie){
+            this.physics.pause();
+            player.setTint(0xff0000);
+            player.anims.play('turn');
+            gameOver = true;
+        }
+
         this.physics.add.collider(player, bombs, hitBomb, null, this);
         this.physics.add.overlap(player, diamonds, hitDiamond, null, this);
-
+        this.physics.add.collider(player,baddie,hitBaddie,null,this);
 
     }
 
@@ -167,9 +197,28 @@
             player.setVelocityX(0);
             player.anims.play('turn');
         }
-        if (cursors.up.isDown && player.body.touching.down) {
+        
+        if (cursors.up.isDown && player.body.touching.down ) {
             player.setVelocityY(-330);
         }
+        else if (cursors.down.isDown) {
+            player.setVelocityY(330);
+        }
+        
+
+        if (life === 0){
+            this.physics.pause();
+            player.setTint(0xff0000);
+            player.anims.play('turn');
+            gameOver = true;
+        }
+
+        if ( life>=1 && baddie.x <= 400){
+            baddie.setVelocityX(80);
+            baddie.anims.play('rightBaddie', true);
+        }
+
+
     }
 
 }());
