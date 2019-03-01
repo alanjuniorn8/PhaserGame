@@ -31,6 +31,7 @@
     let life = 3;
     let lifeText;
     let x;
+    let i = 10;
 
     function preload() {
         this.load.image('sky', 'assets/sky.png');
@@ -125,8 +126,9 @@
         function collectStar(player, star) {
             star.disableBody(true, true);
 
-            score += 1;
+            score += 2;
             scoreText.setText('Score: ' + score);
+            i += 1;
 
             if (stars.countActive(true) === 0 ){
                 stars.children.iterate(function (child) {
@@ -183,12 +185,16 @@
             gameOver = true;
         }
 
+        function collectStar2 (baddie, star){
+            star.disableBody(true, true);
+        }
+
         this.physics.add.collider(player, bombs, hitBomb, null, this);
         this.physics.add.overlap(player, diamonds, hitDiamond, null, this);
         this.physics.add.collider(player,baddie,hitBaddie,null,this);
         this.physics.add.collider(player,baddietwo,hitBaddie,null,this);
-        this.physics.add.overlap(baddie,stars,collectStar,null,this);
-        this.physics.add.overlap(baddietwo,stars,collectStar,null,this);
+        this.physics.add.overlap(baddie,stars,collectStar2,null,this);
+        this.physics.add.overlap(baddietwo,stars,collectStar2,null,this);
 
     }
 
@@ -233,7 +239,6 @@
             baddietwo.setVelocityX(-80);
             baddietwo.anims.play('leftBaddie', true);
         }
-
 
     }
 
