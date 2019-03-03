@@ -59,15 +59,16 @@
 
 
 
+
         player = this.physics.add.sprite(100, 450, 'dude');
         player.setCollideWorldBounds(true);
         player.setBounce(0.3);
 
-        baddie = this.physics.add.sprite(780, 0, 'baddie');
+        baddie = this.physics.add.sprite(350, 20, 'baddie');
         baddie.setCollideWorldBounds(true);
         baddie.setBounce(0.3);
 
-        baddietwo = this.physics.add.sprite(350, 0, 'baddie');
+        baddietwo = this.physics.add.sprite(700, 350, 'baddie');
         baddietwo.setCollideWorldBounds(true);
         baddietwo.setBounce(0.3);
 
@@ -149,7 +150,7 @@
                 
                 let diamond = diamonds.create(x, 16, 'diamond');
                     diamond.setBounce(0.9);
-                    diamond.setCollideWorldBounds(false);
+                    diamond.setCollideWorldBounds(true);
                     diamond.setVelocity(Phaser.Math.Between(-200, 200), 20);
                 }
             
@@ -213,9 +214,11 @@
         this.physics.add.overlap(player, diamonds, hitDiamond, null, this);
         this.physics.add.collider(player,baddie,hitBaddie,null,this);
         this.physics.add.collider(player,baddietwo,hitBaddie,null,this);
+        this.physics.add.collider(player,baddiethree,hitBaddie,null,this);
         this.physics.add.overlap(baddie,stars,collectStar2,null,this);
         this.physics.add.overlap(baddietwo,stars,collectStar2,null,this);
         this.physics.add.overlap(baddiethree,stars,collectStar2,null,this);
+
 
 
     }
@@ -252,31 +255,30 @@
             gameOver = true;
         }
 
-        if ( baddie.body.touching.down && player.x > 400 ){
-            baddie.setVelocityX(90);
+        if ( baddie.body.touching.down && player.x > baddie.x ){
+            baddie.setVelocityX(100);
             baddie.anims.play('rightBaddie', true);
         }
-        else if ( baddie.body.touching.down && player.x < 400 ){
-            baddie.setVelocityX(-90);
+        else if ( baddie.body.touching.down && player.x < baddie.x ){
+            baddie.setVelocityX(-100);
             baddie.anims.play('leftBaddie', true);
         }
-    
-        if ( baddietwo.body.touching.down && player.x > 400 ){
+
+        if ( baddietwo.body.touching.down && player.x > baddietwo.x ){
             baddietwo.setVelocityX(80);
             baddietwo.anims.play('rightBaddie', true);
         }
-        else if ( baddietwo.body.touching.down && player.x < 400 ){
+        else if ( baddietwo.body.touching.down && player.x < baddietwo.x ){
             baddietwo.setVelocityX(-80);
             baddietwo.anims.play('leftBaddie', true);
         }
 
-
-        if ( baddiethree.body.touching.down && player.x < 400 ){
-            baddiethree.setVelocityX(100);
+        if ( baddiethree.body.touching.down && player.x > baddiethree.x ){
+            baddiethree.setVelocityX(60);
             baddiethree.anims.play('rightBaddie', true);
         }
-        else if ( baddiethree.body.touching.down && player.x > 400 ){
-            baddiethree.setVelocityX(-100);
+        else if ( baddiethree.body.touching.down && player.x < baddiethree.x ){
+            baddiethree.setVelocityX(-60);
             baddiethree.anims.play('leftBaddie', true);
         }
 
