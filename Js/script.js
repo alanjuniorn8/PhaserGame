@@ -31,7 +31,7 @@
     let life = 3;
     let lifeText;
     let x;
-    let i = 10;
+
 
     function preload() {
         this.load.image('sky', 'assets/sky.png');
@@ -43,9 +43,6 @@
             { frameWidth: 32, frameHeight: 48 }
         );
         this.load.spritesheet('baddie', 'assets/baddie.png',
-            { frameWidth: 32, frameHeight: 32 }
-        );
-        this.load.spritesheet('baddietwo', 'assets/baddie.png',
             { frameWidth: 32, frameHeight: 32 }
         );
     }
@@ -60,18 +57,20 @@
         ground.create(600, 400, 'platform');
         ground.create(50, 250, 'platform');
 
+
+
         player = this.physics.add.sprite(100, 450, 'dude');
         player.setCollideWorldBounds(true);
         player.setBounce(0.3);
 
-        baddie = this.physics.add.sprite(20, 200, 'baddie');
-        baddie.setCollideWorldBounds(false);
+        baddie = this.physics.add.sprite(780, 0, 'baddie');
+        baddie.setCollideWorldBounds(true);
         baddie.setBounce(0.3);
 
-        baddietwo = this.physics.add.sprite(780, 0, 'baddie');
-        baddietwo.setCollideWorldBounds(false);
+        baddietwo = this.physics.add.sprite(350, 0, 'baddie');
+        baddietwo.setCollideWorldBounds(true);
         baddietwo.setBounce(0.3);
-        
+
         this.anims.create({
             key: 'left',
             frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 3 }),
@@ -128,13 +127,12 @@
 
             score += 2;
             scoreText.setText('Score: ' + score);
-            i += 1;
 
             if (stars.countActive(true) === 0 ){
                 stars.children.iterate(function (child) {
         
                     child.enableBody(true, child.x, 0, true, true);
-        
+                    
                 });
                 
                 x = (player.x < 400) ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
@@ -187,6 +185,23 @@
 
         function collectStar2 (baddie, star){
             star.disableBody(true, true);
+
+            if (stars.countActive(true) === 0 ){
+                stars.children.iterate(function (child) {
+        
+                    child.enableBody(true, child.x, 0, true, true);
+                    
+                });
+                
+                x = (player.x < 400) ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
+                
+                let bomb = bombs.create(x, 16, 'bomb');
+                    bomb.setBounce(1);
+                    bomb.setCollideWorldBounds(true);
+                    bomb.setVelocity(Phaser.Math.Between(-200, 200),20);
+                
+                }
+            
         }
 
         this.physics.add.collider(player, bombs, hitBomb, null, this);
@@ -230,15 +245,24 @@
             gameOver = true;
         }
 
-        if ( life>=1 && baddie.x <= 400 && baddie.body.touching.down){
+        if ( baddie.body.touching.down && player.x > 400 ){
             baddie.setVelocityX(80);
             baddie.anims.play('rightBaddie', true);
         }
-
-        if ( life>=1 && baddietwo.x >= 400 && baddietwo.body.touching.down){
+        else if ( baddie.body.touching.down && player.x < 400 ){
+            baddie.setVelocityX(-80);
+            baddie.anims.play('leftBaddie', true);
+        }
+    
+        if ( baddietwo.body.touching.down && player.x > 400 ){
+            baddietwo.setVelocityX(80);
+            baddietwo.anims.play('rightBaddie', true);
+        }
+        else if ( baddietwo.body.touching.down && player.x < 400 ){
             baddietwo.setVelocityX(-80);
             baddietwo.anims.play('leftBaddie', true);
         }
+
 
     }
 
