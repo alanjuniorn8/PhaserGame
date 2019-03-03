@@ -71,6 +71,10 @@
         baddietwo.setCollideWorldBounds(true);
         baddietwo.setBounce(0.3);
 
+        baddiethree = this.physics.add.sprite(100, 20, 'baddie');
+        baddiethree.setCollideWorldBounds(true);
+        baddiethree.setBounce(0.3);
+
         this.anims.create({
             key: 'left',
             frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 3 }),
@@ -105,6 +109,7 @@
         this.physics.add.collider(player, ground);
         this.physics.add.collider(baddie, ground);
         this.physics.add.collider(baddietwo, ground);
+        this.physics.add.collider(baddiethree, ground);
 
         cursors = this.input.keyboard.createCursorKeys();
 
@@ -210,6 +215,8 @@
         this.physics.add.collider(player,baddietwo,hitBaddie,null,this);
         this.physics.add.overlap(baddie,stars,collectStar2,null,this);
         this.physics.add.overlap(baddietwo,stars,collectStar2,null,this);
+        this.physics.add.overlap(baddiethree,stars,collectStar2,null,this);
+
 
     }
 
@@ -246,11 +253,11 @@
         }
 
         if ( baddie.body.touching.down && player.x > 400 ){
-            baddie.setVelocityX(80);
+            baddie.setVelocityX(90);
             baddie.anims.play('rightBaddie', true);
         }
         else if ( baddie.body.touching.down && player.x < 400 ){
-            baddie.setVelocityX(-80);
+            baddie.setVelocityX(-90);
             baddie.anims.play('leftBaddie', true);
         }
     
@@ -263,6 +270,15 @@
             baddietwo.anims.play('leftBaddie', true);
         }
 
+
+        if ( baddiethree.body.touching.down && player.x < 400 ){
+            baddiethree.setVelocityX(100);
+            baddiethree.anims.play('rightBaddie', true);
+        }
+        else if ( baddiethree.body.touching.down && player.x > 400 ){
+            baddiethree.setVelocityX(-100);
+            baddiethree.anims.play('leftBaddie', true);
+        }
 
     }
 
