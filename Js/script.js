@@ -66,7 +66,7 @@
         player.setCollideWorldBounds(true);
         player.setBounce(0.3);
 
-        baddie = this.physics.add.sprite(350, 20, 'baddie');
+        baddie = this.physics.add.sprite(350, 500, 'baddie');
         baddie.setCollideWorldBounds(true);
         baddie.setBounce(0.3);
 
@@ -74,7 +74,7 @@
         baddietwo.setCollideWorldBounds(true);
         baddietwo.setBounce(0.3);
 
-        baddiethree = this.physics.add.sprite(100, 20, 'baddie');
+        baddiethree = this.physics.add.sprite(20, 200, 'baddie');
         baddiethree.setCollideWorldBounds(true);
         baddiethree.setBounce(0.3);
 
@@ -273,29 +273,29 @@
         }
 
         if ( baddie.body.touching.down && player.x > baddie.x ){
-            baddie.setVelocityX(100);
+            baddie.setVelocityX(70);
             baddie.anims.play('rightBaddie', true);
         }
         else if ( baddie.body.touching.down && player.x < baddie.x ){
-            baddie.setVelocityX(-100);
+            baddie.setVelocityX(-70);
             baddie.anims.play('leftBaddie', true);
         }
 
         if ( baddietwo.body.touching.down && player.x > baddietwo.x ){
-            baddietwo.setVelocityX(80);
+            baddietwo.setVelocityX(60);
             baddietwo.anims.play('rightBaddie', true);
         }
         else if ( baddietwo.body.touching.down && player.x < baddietwo.x ){
-            baddietwo.setVelocityX(-80);
+            baddietwo.setVelocityX(-60);
             baddietwo.anims.play('leftBaddie', true);
         }
 
         if ( baddiethree.body.touching.down && player.x > baddiethree.x ){
-            baddiethree.setVelocityX(60);
+            baddiethree.setVelocityX(50);
             baddiethree.anims.play('rightBaddie', true);
         }
         else if ( baddiethree.body.touching.down && player.x < baddiethree.x ){
-            baddiethree.setVelocityX(-60);
+            baddiethree.setVelocityX(-50);
             baddiethree.anims.play('leftBaddie', true);
         }
 
