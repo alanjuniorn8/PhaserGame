@@ -26,6 +26,7 @@
     let baddietwo;
     let bombs;
     let diamonds;
+    let firstaids;
     let score = 0;
     let scoreText;
     let life = 3;
@@ -39,6 +40,7 @@
         this.load.image('star', 'assets/star.png');
         this.load.image('bomb', 'assets/bomb.png');
         this.load.image('diamond', 'assets/diamond.png')
+        this.load.image('firstaid', 'assets/firstaid.png')
         this.load.spritesheet('dude', 'assets/dude.png',
             { frameWidth: 32, frameHeight: 48 }
         );
@@ -167,6 +169,9 @@
         diamonds = this.physics.add.group();
         this.physics.add.collider(diamonds, ground);
 
+        firstaids = this.physics.add.group();
+        this.physics.add.collider(firstaids, ground);
+
         function hitBomb(player, bomb) {
             bomb.disableBody(true, true);
 
@@ -189,6 +194,13 @@
             gameOver = true;
         }
 
+        function hitFirstaid(player, firstaid){
+            firstaid.disableBody(true, true);
+
+            life += 1;
+            lifeText.setText('Life: ' + life);
+        }
+
         function collectStar2 (baddie, star){
             star.disableBody(true, true);
 
@@ -205,13 +217,18 @@
                     bomb.setBounce(1);
                     bomb.setCollideWorldBounds(true);
                     bomb.setVelocity(Phaser.Math.Between(-200, 200),20);
-                
+                    
+                let firstaid = firstaids.create(x, 16, 'firstaid');
+                    firstaid.setBounce(1);
+                    firstaid.setCollideWorldBounds(true);
+                    firstaid.setVelocity(Phaser.Math.Between(-200, 200),20);
                 }
             
         }
 
         this.physics.add.collider(player, bombs, hitBomb, null, this);
         this.physics.add.overlap(player, diamonds, hitDiamond, null, this);
+        this.physics.add.overlap(player, firstaids, hitFirstaid, null, this);
         this.physics.add.collider(player,baddie,hitBaddie,null,this);
         this.physics.add.collider(player,baddietwo,hitBaddie,null,this);
         this.physics.add.collider(player,baddiethree,hitBaddie,null,this);
